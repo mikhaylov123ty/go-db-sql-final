@@ -30,6 +30,12 @@ func NewParcelService(store ParcelStore) ParcelService {
 	return ParcelService{store: store}
 }
 
+// переместил вывод структуры посылки для реализации метода интерфейса fmt.Stringer
+func (p Parcel) String() string {
+	return fmt.Sprintf("Новая посылка № %d на адрес %s от клиента с идентификатором %d зарегистрирована %s",
+		p.Number, p.Address, p.Client, p.CreatedAt)
+}
+
 func (s ParcelService) Register(client int, address string) (Parcel, error) {
 	parcel := Parcel{
 		Client:    client,
@@ -45,8 +51,8 @@ func (s ParcelService) Register(client int, address string) (Parcel, error) {
 
 	parcel.Number = id
 
-	fmt.Printf("Новая посылка № %d на адрес %s от клиента с идентификатором %d зарегистрирована %s\n",
-		parcel.Number, parcel.Address, parcel.Client, parcel.CreatedAt)
+	// печать через метод интерфейса fmt.Stringer
+	fmt.Println(parcel)
 
 	return parcel, nil
 }
@@ -59,8 +65,7 @@ func (s ParcelService) PrintClientParcels(client int) error {
 
 	fmt.Printf("Посылки клиента %d:\n", client)
 	for _, parcel := range parcels {
-		fmt.Printf("Посылка № %d на адрес %s от клиента с идентификатором %d зарегистрирована %s, статус %s\n",
-			parcel.Number, parcel.Address, parcel.Client, parcel.CreatedAt, parcel.Status)
+		fmt.Println(parcel)
 	}
 	fmt.Println()
 
